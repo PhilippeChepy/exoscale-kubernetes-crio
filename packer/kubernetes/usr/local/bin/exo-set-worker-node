@@ -1,0 +1,19 @@
+#!/bin/sh
+# Helper script called by worker nodes when joining the cluster via SSH.
+# This script set the worker node's providerID, and the region (zone) of this node.
+
+set -e
+
+if [ "$#" -ne 3 ]; then
+    echo "usage: set-worker-node <node-hostname> <vm-id> <zone>"
+    exit 2
+fi
+
+VM_HOSTNAME=$1
+VM_ID=$2
+VM_AVAILABILITY_ZONE=$3
+
+PATCH={\"spec\":{\"providerID\":\"exoscale://$VM_ID\"}}
+kubectl --kubeconfig /root/.kube/config patch node $VM_HOSTNAME -p $PATCH
+kubectl --kubeconfig /root/.kube/config label node $VM_HOSTNAME node-role.kubernetes.io/worker=worker
+kubectl --kubeconfig /root/.kube/config label node $VM_HOSTNAME topology.kubernetes.io/region=$VM_AVAILABILITY_ZONE

@@ -1,0 +1,8 @@
+# Private network configuration:
+#   - On control-plane node, the IP is statically set via Exoscale Terraform provider, from the var.control_plane_ip_address variable.
+#   - On worker nodes, the IP is dynamically set by the managed private network from Exoscale.
+network:
+  version: 2
+  ethernets:
+    eth1:
+      dhcp4: true
