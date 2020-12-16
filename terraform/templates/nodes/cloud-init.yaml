@@ -1,0 +1,21 @@
+#cloud-config
+
+write_files:
+  # Install the deployment SSH key, required to connect to the control-plane node when joining the cluster
+  - path: /root/.ssh/id_rsa
+    permissions: "0600"
+    content: |
+      ${indent(6, private_key)}
+
+runcmd:
+  # Reset Kubeadm
+  - kubeadm reset --force
+  # Wait for control-plane to be ready
+  - until ssh -o StrictHostKeyChecking=no ${control_plane_private_ip_address} kubectl get nodes; do sleep 2; done
+  # Execute kubeadm's join command (generated from control-plane)
+  - $(ssh -o StrictHostKeyChecking=no ${control_plane_private_ip_address} kubeadm token create --print-join-command)
+  # set provider informations on the node
+  - VM_HOSTNAME=$(hostname)
+  - VM_ID=$(curl http://metadata.exoscale.com/latest/meta-data/instance-id)
+  - VM_AVAILABILITY_ZONE=$(curl http://metadata.exoscale.com/latest/meta-data/availability-zone)
+  - ssh -o StrictHostKeyChecking=no ${control_plane_private_ip_address} exo-set-worker-node $VM_HOSTNAME $VM_ID $VM_AVAILABILITY_ZONE

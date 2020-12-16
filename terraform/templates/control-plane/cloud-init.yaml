@@ -1,0 +1,35 @@
+#cloud-config
+
+write_files:
+  # Kubeadm configuration
+  - path: /etc/kubernetes/kubeadmcfg.yaml
+    content: |
+      ${indent(6, kubeadm_configuration)}
+
+  # Exoscale cluster autoscaler deployment manifests
+  - path: /tmp/exoscale-cluster-autoscaler.yaml
+    permissions: "0600"
+    content: |
+      ${indent(6, autoscaler_manifests)}
+
+runcmd:
+  # Initialize Kubernetes control-plane
+  - kubeadm init --config /etc/kubernetes/kubeadmcfg.yaml --upload-certs
+  # Set local kube configuration
+  - mkdir -p /root/.kube
+  - cp -i /etc/kubernetes/admin.conf /root/.kube/config
+  - chown root:root /root/.kube/config
+  # Wait for the API server to be responsive
+  - until kubectl --kubeconfig /root/.kube/config get nodes; do sleep 2; done
+  # Install Calico as CNI
+  - curl https://docs.projectcalico.org/manifests/calico.yaml -o /root/calico.yaml
+  - kubectl --kubeconfig /root/.kube/config apply -f /root/calico.yaml
+  # Set region label and providerID on the control-plane node
+  - export VM_HOSTNAME=$(hostname)
+  - export VM_ID=$(curl http://metadata.exoscale.com/latest/meta-data/instance-id)
+  - export VM_AVAILABILITY_ZONE=$(curl http://metadata.exoscale.com/latest/meta-data/availability-zone)
+  - export PATCH={\"spec\":{\"providerID\":\"exoscale://$VM_ID\"}}
+  - kubectl --kubeconfig /root/.kube/config label node $VM_HOSTNAME topology.kubernetes.io/region=$VM_AVAILABILITY_ZONE
+  - kubectl --kubeconfig /root/.kube/config patch node $VM_HOSTNAME -p $PATCH
+  # Install Exoscale cluster autoscaler
+  - kubectl --kubeconfig /root/.kube/config apply -f /tmp/exoscale-cluster-autoscaler.yaml

@@ -1,0 +1,24 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: InitConfiguration
+bootstrapTokens:
+- token: "${kubeadm_token}"
+  description: "default kubeadm bootstrap token"
+  ttl: "0"
+localAPIEndpoint:
+  advertiseAddress: ${control_plane_private_ip_address}
+  bindPort: 6443
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+kubernetesVersion: 1.20.0
+apiServer:
+  extraArgs:
+    service-node-port-range: 30000-32767
+networking:
+  podSubnet: ${pod_subnet}
+  serviceSubnet: ${service_subnet}
+  dnsDomain: ${dns_domain}
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
