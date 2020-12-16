@@ -111,6 +111,7 @@ build {
             # preload Kubernetes container images
             "sudo kubeadm config images pull",
 
+            # removed because of conflicts with (late) calico installation
             "sudo rm /etc/cni/net.d/100-crio-bridge.conf"
         ]
     }
