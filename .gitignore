@@ -6,3 +6,6 @@ terraform/.terraform*
 terraform/terraform.tfvars
 terraform/terraform.tfstate*
 terraform/.terraform.tfstate.lock.info
+
+# Temporary (secret) files
+.ssh

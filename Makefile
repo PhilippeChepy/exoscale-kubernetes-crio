@@ -20,7 +20,7 @@ ZONE ?= "ch-dk-2"
 
 .PHONY: packer.build
 packer.build: check-env
-	$(PACKER) build -var api_key="$(EXOSCALE_API_KEY)" -var api_secret="$(EXOSCALE_API_SECRET)" -var zone=$(ZONE) kubernetes.pkr.hcl
+	@$(PACKER) build -var api_key="$(EXOSCALE_API_KEY)" -var api_secret="$(EXOSCALE_API_SECRET)" -var zone=$(ZONE) kubernetes.pkr.hcl
 
 .PHONY: packer.deps
 packer.deps:
@@ -28,15 +28,22 @@ packer.deps:
 
 .PHONY: terraform.init
 terraform.init: check-env
-	$(TERRAFORM) init -var api_key="$(EXOSCALE_API_KEY)" -var api_secret="$(EXOSCALE_API_SECRET)" -var zone=$(ZONE)
+	@$(TERRAFORM) init -var api_key="$(EXOSCALE_API_KEY)" -var api_secret="$(EXOSCALE_API_SECRET)" -var zone=$(ZONE)
 
 .PHONY: terraform.apply
 terraform.apply: check-env
-	$(TERRAFORM) apply -var api_key="$(EXOSCALE_API_KEY)" -var api_secret="$(EXOSCALE_API_SECRET)" -var zone=$(ZONE)
+	@$(TERRAFORM) apply -var api_key="$(EXOSCALE_API_KEY)" -var api_secret="$(EXOSCALE_API_SECRET)" -var zone=$(ZONE)
 
 .PHONY: terraform.destroy
 terraform.destroy: check-env
-	$(TERRAFORM) destroy -var api_key="$(EXOSCALE_API_KEY)" -var api_secret="$(EXOSCALE_API_SECRET)" -var zone=$(ZONE)
+	@$(TERRAFORM) destroy -var api_key="$(EXOSCALE_API_KEY)" -var api_secret="$(EXOSCALE_API_SECRET)" -var zone=$(ZONE)
+
+.PHONY: ssh-cp
+ssh-cp: check-env
+	@$(TERRAFORM) output provisioning_private_key > .ssh
+	@chmod 0600 .ssh
+	@ssh -i .ssh ubuntu@$(shell $(TERRAFORM) output control_plane_public_ip)
+	@rm .ssh
 
 .PHONY: check-env
 check-env:
