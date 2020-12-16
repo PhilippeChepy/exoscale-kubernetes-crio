@@ -1,0 +1,7 @@
+# You can copy this file as "terraform.tfvars" and fill the following variables with your Packer's built template id.
+
+# Image used as template for the control-plane instance
+control_plane_template_id = "..."
+
+# Image used as template for the instance pool
+node_template_id = "..."
