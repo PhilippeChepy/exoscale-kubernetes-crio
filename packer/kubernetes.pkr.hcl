@@ -90,9 +90,9 @@ build {
 
             # install CRI-O (as a replacement for Docker)
             "curl -s https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/Release.key | sudo apt-key add -",
-            "curl -s https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/1.19/xUbuntu_20.04/Release.key | sudo apt-key add -",
+            "curl -s https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/1.20/xUbuntu_20.04/Release.key | sudo apt-key add -",
             "sudo apt-add-repository \"deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04 /\"",
-            "sudo apt-add-repository \"deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/1.19/xUbuntu_20.04/ /\"",
+            "sudo apt-add-repository \"deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/1.20/xUbuntu_20.04/ /\"",
 
             "sudo apt-get update",
             "sudo apt-get install -y cri-o cri-o-runc cri-tools cri-o-runc runc",
