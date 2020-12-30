@@ -8,7 +8,7 @@ PACKER = docker run -it --rm \
 
 
 # Terraform
-TERRAFORM_IMAGE = hashicorp/terraform:0.13.5
+TERRAFORM_IMAGE = hashicorp/terraform:0.14.3
 
 TERRAFORM = docker run -it --rm \
 	-v $(PWD)/terraform/:/root \
@@ -40,7 +40,7 @@ terraform.destroy: check-env
 
 .PHONY: ssh-cp
 ssh-cp: check-env
-	@$(TERRAFORM) output provisioning_private_key > .ssh
+	@$(TERRAFORM) output -raw provisioning_private_key > .ssh
 	@chmod 0600 .ssh
 	@ssh -i .ssh ubuntu@$(shell $(TERRAFORM) output control_plane_public_ip)
 	@rm .ssh

@@ -2,7 +2,8 @@
 packer/.packer.d
 
 # Terraform
-terraform/.terraform*
+terraform/.terraform
+terraform/.terraform.d
 terraform/terraform.tfvars
 terraform/terraform.tfstate*
 terraform/.terraform.tfstate.lock.info

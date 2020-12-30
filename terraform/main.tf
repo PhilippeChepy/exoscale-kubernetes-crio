@@ -1,5 +1,4 @@
 provider exoscale {
-  version = ">= 0.20"
   key     = var.api_key
   secret  = var.api_secret
 
