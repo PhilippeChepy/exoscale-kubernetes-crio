@@ -1,5 +1,5 @@
 # Packer
-PACKER_IMAGE = hashicorp/packer:1.6.5
+PACKER_IMAGE = hashicorp/packer:1.6.6
 
 PACKER = docker run -it --rm \
 	-v $(PWD)/packer/:/root \
@@ -8,7 +8,7 @@ PACKER = docker run -it --rm \
 
 
 # Terraform
-TERRAFORM_IMAGE = hashicorp/terraform:0.14.3
+TERRAFORM_IMAGE = hashicorp/terraform:0.14.5
 
 TERRAFORM = docker run -it --rm \
 	-v $(PWD)/terraform/:/root \
@@ -24,7 +24,7 @@ packer.build: check-env
 
 .PHONY: packer.deps
 packer.deps:
-	mkdir -p $(PWD)/packer/.packer.d/plugins && wget -qO - https://github.com/exoscale/packer-builder-exoscale/releases/download/v0.2.2/packer-builder-exoscale_0.2.2_linux_amd64.tar.gz | tar -xvzf - -C $(PWD)/packer/.packer.d/plugins packer-builder-exoscale
+	mkdir -p $(PWD)/packer/.packer.d/plugins && wget -qO - https://github.com/exoscale/packer-builder-exoscale/releases/download/v0.2.3/packer-builder-exoscale_0.2.3_linux_amd64.tar.gz | tar -xvzf - -C $(PWD)/packer/.packer.d/plugins packer-builder-exoscale
 
 .PHONY: terraform.init
 terraform.init: check-env
