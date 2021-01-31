@@ -133,6 +133,12 @@ resource exoscale_security_group_rules nodes_firewall_rules {
   }
 }
 
+resource "exoscale_affinity" "nodes_affinity" {
+  name = format("%s-nodes", var.name)
+  description = format("anti affinity for %s", var.name)
+  type = "host anti-affinity"
+}
+
 // nodes agents
 data template_cloudinit_config nodes_cloud_init {
   gzip = false
@@ -163,6 +169,7 @@ resource exoscale_instance_pool nodes {
   user_data = data.template_cloudinit_config.nodes_cloud_init.rendered
   key_pair = exoscale_ssh_keypair.provisioning_key.name
 
+  affinity_group_ids = [exoscale_affinity.nodes_affinity.id]
   security_group_ids = [exoscale_security_group.nodes_firewall.id]
   network_ids = [exoscale_network.private_network.id]
 
