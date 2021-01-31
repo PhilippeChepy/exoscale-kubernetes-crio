@@ -12,6 +12,12 @@ write_files:
     content: |
       ${indent(6, autoscaler_manifests)}
 
+  # Exoscale cloud control manager deployment manifests
+  - path: /tmp/exoscale-cloud-control-manager.yaml
+    permissions: "0600"
+    content: |
+      ${indent(6, ccm_manifests)}
+
 runcmd:
   # Initialize Kubernetes control-plane
   - kubeadm init --config /etc/kubernetes/kubeadmcfg.yaml --upload-certs
@@ -33,3 +39,5 @@ runcmd:
   - kubectl --kubeconfig /root/.kube/config patch node $VM_HOSTNAME -p $PATCH
   # Install Exoscale cluster autoscaler
   - kubectl --kubeconfig /root/.kube/config apply -f /tmp/exoscale-cluster-autoscaler.yaml
+  # Install Exoscale Cloud Control Manager
+  - kubectl --kubeconfig /root/.kube/config apply -f /tmp/exoscale-cloud-control-manager.yaml

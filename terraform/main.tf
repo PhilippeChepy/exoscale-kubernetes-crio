@@ -70,6 +70,11 @@ data template_cloudinit_config control_plane_cloud_init {
         exoscale_api_key = base64encode(var.api_key)
         exoscale_api_secret = base64encode(var.api_secret)
       })
+      ccm_manifests = templatefile("${path.module}/templates/control-plane/tmp/exoscale-cloud-control-manager.yaml", {
+        exoscale_api_endpoint = base64encode("https://api.exoscale.com/v1")
+        exoscale_api_key = base64encode(var.api_key)
+        exoscale_api_secret = base64encode(var.api_secret)
+      })
     })
   }
 }
