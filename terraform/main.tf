@@ -50,18 +50,6 @@ resource exoscale_security_group_rules control_plane_firewall_ingress {
   }
 }
 
-resource random_string kubeadm_token_part1 {
-  length = 6
-  upper = false
-  special = false
-}
-
-resource random_string kubeadm_token_part2 {
-  length = 16
-  upper = false
-  special = false
-}
-
 // control-plane agent
 data template_cloudinit_config control_plane_cloud_init {
   gzip = false
@@ -72,7 +60,6 @@ data template_cloudinit_config control_plane_cloud_init {
     content_type = "text/cloud-config"
     content = templatefile("${path.module}/templates/control-plane/cloud-init.yaml", {
       kubeadm_configuration = templatefile("${path.module}/templates/control-plane/etc/kubernetes/kubeadmcfg.yaml", {
-        kubeadm_token = "${random_string.kubeadm_token_part1.result}.${random_string.kubeadm_token_part2.result}"
         pod_subnet = "10.244.0.0/16"
         service_subnet = "10.245.0.0/16"
         dns_domain = "cluster.internal"
