@@ -15,6 +15,14 @@ Two steps are involved in the installation of the cluster:
 * The creation of a system image using [Packer](https://www.packer.io) and the Exoscale plugin. This image contains the packages for Kubernetes, [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/) and CRI-O.
 * The provisioning of the cluster using [Terraform](https://www.terraform.io) and the Exoscale provider (blazingly fast!)
 
+## Explanations
+
+This repository is explained in depth (in French) here :
+
+* [Partie 1 : Préparation du dépôt](https://easyadmin.tech/tutoriel-comment-deployer-kubernetes-chez-exoscale-avec-packer-et-terraform-preparation-depot)
+* [Partie 2 : Création d'une image de machine virtuelle](https://easyadmin.tech/tutoriel-comment-deployer-kubernetes-chez-exoscale-avec-packer-et-terraform-creation-image-machine-virtuelle)
+* [Partie 3 : Création de l'infrastructure](https://easyadmin.tech/tutoriel-comment-deployer-kubernetes-chez-exoscale-avec-packer-et-terraform-creation-infrastructure)
+
 ## Installation
 
 You must have docker installed locally in order to make the work done. Packer and Terraform are run using containers.
@@ -118,3 +126,4 @@ Philippe Chepy
 
 * Github: [@PhilippeChepy](https://github.com/PhilippeChepy)
 * LinkedIn: [@philippe-chepy](https://www.linkedin.com/in/philippe-chepy/)
+* Website [EasyAdmin](https://easyadmin.tech)
